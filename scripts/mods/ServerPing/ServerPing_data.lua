@@ -1,3 +1,4 @@
+---@class ServerPingMod
 local mod = get_mod("ServerPing")
 
 return {
