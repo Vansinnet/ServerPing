@@ -1,3 +1,4 @@
+---@class ServerPingMod
 local mod = get_mod("ServerPing")
 
 local RegionLatency = require("scripts/backend/region_latency")
@@ -428,6 +429,9 @@ local function merge_test_results(results)
     }
 end
 
+---@class ServerPingLatencyResult: RegionLatencyResult
+---@field completed_rounds integer
+
 local function run_latency_test(rounds, should_continue)
     local results = {}
 
@@ -737,6 +741,7 @@ function ServerPingView:_start_ping(test_id)
     run_latency_test(test.rounds, function()
         return self._server_ping_active and request_id == self._request_id
     end):next(function(result)
+        ---@cast result ServerPingLatencyResult
         mod.finish_server_ping()
 
         if result.completed_rounds == test.rounds then

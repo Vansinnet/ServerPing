@@ -1,3 +1,4 @@
+---@class ServerPingMod: DMFMod
 local mod = get_mod("ServerPing")
 
 local VIEW_NAME = "server_ping_view"
@@ -10,7 +11,9 @@ local AGGREGATE_VERSION = 2
 local MAX_HISTORY_ENTRIES = 10
 local os = Mods.lua.os
 local ping_guard = mod:persistent_table("ping_guard")
+---@cast ping_guard table
 local history_state = mod:persistent_table("history_state")
+---@cast history_state table
 
 ping_guard.next_allowed_at = ping_guard.next_allowed_at or 0
 ping_guard.pending = ping_guard.pending or false
@@ -170,6 +173,7 @@ local function update_server_ping_aggregate(test_id, result, timestamp, date, ta
 
         for j = 1, #reefs do
             local reef = reefs[j]
+            ---@type table|false|nil
             local region = type(reef) == "string" and regions[reef]
 
             if type(reef) == "string" and type(region) ~= "table" then
@@ -190,6 +194,7 @@ local function update_server_ping_aggregate(test_id, result, timestamp, date, ta
             end
 
             if type(reef) == "string" then
+                ---@cast region table
                 region.endpoints = type(region.endpoints) == "table" and region.endpoints or {}
 
                 if not touched_regions[reef] then
